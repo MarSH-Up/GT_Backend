@@ -19,7 +19,7 @@ This is the backend service for Gesture Therapy, built using the NestJS framewor
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v20 or higher)
 - PostgreSQL
 - npm or yarn
 
