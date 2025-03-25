@@ -26,7 +26,6 @@ export class AccessAuthGuard implements CanActivate {
 
     try {
       const decoded = await this._authService.validateToken(token);
-      console.log(decoded);
       const requiredCompanies = this.reflector.get<UserAccessLevel[]>(
         'access',
         context.getHandler(),

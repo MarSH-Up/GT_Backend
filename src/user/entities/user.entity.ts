@@ -6,7 +6,7 @@ export class UserSerializer {
       id: user.id,
       email: user.email,
       name: user.name,
-      therapy: user.therapy,
+      therapistId: user.therapistId,
       age: user.age,
       institution: user.institution,
       createdBy: user.createdBy,

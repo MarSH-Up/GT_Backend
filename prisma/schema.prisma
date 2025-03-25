@@ -11,29 +11,43 @@ enum UserAccessLevel {
   USER
   ADMIN
   STUDENT
+  DOCTOR
   THERAPIST
 }
 
+model Institution {
+  id        String   @id @default(uuid())
+  name      String
+  address   String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  users user[]
+}
+
 model user {
-  id              String          @id @default(uuid())
-  email           String          @unique
-  name            String
-  password        String
-  age             Int?
-  gender          String? // 'male' | 'female' | 'non-binary' | 'prefer-not-to-say'
-  phone           String? // single field
-  city            String?
-  state           String?
-  country         String?
-  institution     String? // for therapists
+  id       String  @id @default(uuid())
+  email    String  @unique
+  name     String
+  password String
+  age      Int?
+  gender   String? // 'male' | 'female' | 'non-binary' | 'prefer-not-to-say'
+  phone    String?
+  city     String?
+  state    String?
+  country  String?
+
+  institutionId String? // Foreign key to Institution
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+
   userAccessLevel UserAccessLevel @default(USER)
   createdBy       String
   createdAt       DateTime        @default(now())
   deletedAt       DateTime?
   deletedBy       String?
 
-  patientProfile      Patient? // relation if user is a patient
-  therapistId         String? // relation to therapist if user is a patient
+  patientProfile      Patient?
+  therapistId         String?
   sessionsAsTherapist Session[] @relation("ClinicianSessions")
 }
 

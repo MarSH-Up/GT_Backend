@@ -40,15 +40,22 @@ export class AuthService {
 
     if (user) {
       let token: string;
-      if (await bcrypt.compare(loginDto.password, user.password)) {
+      const validPassword = await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
+
+      if (validPassword) {
         token = await this.generateAuthToken(user);
+
         return { token: token };
+      } else {
+        throw new BadRequestException('Invalid credentials');
       }
     }
   }
 
   generateAuthToken(user: User): Promise<string> {
-    console.log(user);
     return this.jwtService.signAsync(
       {
         userId: user.id,

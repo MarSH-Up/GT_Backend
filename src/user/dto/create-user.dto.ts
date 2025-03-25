@@ -4,9 +4,9 @@ export class CreateUserDto {
   email: string;
   password: string;
   name: string;
-  therapy: string;
+  therapistId: string;
   age: number;
-  institution: string;
+  institutionId: string;
   createdBy: string;
   userAccessLevel: UserAccessLevel;
 }
