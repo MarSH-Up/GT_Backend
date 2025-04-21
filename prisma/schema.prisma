@@ -71,24 +71,24 @@ model Therapy {
 }
 
 model Session {
-  id          String    @id @default(uuid())
-  startTime   DateTime?
-  endTime     DateTime?
-  date        DateTime?
-  patientId   String
-  therapistId String?
-
-  patient   Patient       @relation(fields: [patientId], references: [id])
-  therapist user?         @relation("ClinicianSessions", fields: [therapistId], references: [id])
-  games     SessionGame[]
+  id              String        @id @default(uuid())
+  startTime       DateTime?
+  endTime         DateTime?
+  date            DateTime?
+  patientId       String
+  therapistId     String?
+  sessionComments String?
+  patient         Patient       @relation(fields: [patientId], references: [id])
+  therapist       user?         @relation("ClinicianSessions", fields: [therapistId], references: [id])
+  games           SessionGame[]
 }
 
 model SessionGame {
-  id          String @id @default(uuid())
-  sessionId   String
-  gameName    String
-  playingTime Int?
-  score       Int?
-
-  session Session @relation(fields: [sessionId], references: [id])
+  id           String  @id @default(uuid())
+  sessionId    String
+  gameName     String
+  playingTime  Int?
+  score        Int?
+  gameComments String?
+  session      Session @relation(fields: [sessionId], references: [id])
 }
