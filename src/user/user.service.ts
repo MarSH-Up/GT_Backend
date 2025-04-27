@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
-import { User } from './types/user.type';
+import { User, UserBrief } from './types/user.type';
 import { UserRepository } from './user.repository';
 import { PasswordService } from 'src/auth/password.service';
 import { ICurrentUser } from './entities/current.user.dto';
@@ -52,8 +52,14 @@ export class UserService {
     return this.userRepository.findById(id);
   }
 
-  async profile(currentUser: ICurrentUser): Promise<User> {
-    return this.userRepository.findByEmail(currentUser.email);
+  async profile(currentUser: ICurrentUser): Promise<UserBrief> {
+    const user = await this.userRepository.findByEmail(currentUser.email);
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      userAccessLevel: user.userAccessLevel,
+    };
   }
 
   async updateProfile(

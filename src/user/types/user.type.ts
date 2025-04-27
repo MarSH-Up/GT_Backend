@@ -9,6 +9,13 @@ export interface Institution {
   users?: User[];
 }
 
+export interface UserBrief {
+  id: string;
+  email: string;
+  name: string;
+  userAccessLevel: UserAccessLevel;
+}
+
 export interface User {
   id: string;
   email: string;

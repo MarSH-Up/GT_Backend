@@ -7,5 +7,6 @@ export enum UserAccessLevel {
   ADMIN = 'ADMIN',
   STUDENT = 'STUDENT',
   THERAPIST = 'THERAPIST',
+  DOCTOR = 'DOCTOR',
   all = 'all',
 }
