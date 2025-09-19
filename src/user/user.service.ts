@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { User, UserBrief } from './types/user.type';
 import { UserRepository } from './user.repository';
@@ -45,7 +50,11 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
   }
 
   async findById(id: string): Promise<User> {
@@ -62,10 +71,22 @@ export class UserService {
     };
   }
 
+  async getAllUsers(): Promise<User[]> {
+    return this.userRepository.findAll();
+  }
+
   async updateProfile(
     updateUserDto: UpdateUser,
     userId: string,
   ): Promise<User> {
     return this.userRepository.update(updateUserDto, userId);
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new NotFoundException(`User with id ${userId} not found`);
+    }
+    return this.userRepository.delete(userId);
   }
 }

@@ -52,6 +52,14 @@ export class PrismaUserRepository extends UserRepository {
     return user as unknown as User;
   }
 
+  async findAll(): Promise<User[]> {
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => ({
+      ...user,
+      id: Number(user.id),
+    })) as unknown as User[];
+  }
+
   async update(updateUserDto: UpdateUser, userId: string): Promise<User> {
     const updated = await this.prisma.user.update({
       where: { id: userId },
@@ -62,5 +70,11 @@ export class PrismaUserRepository extends UserRepository {
       ...updated,
       id: Number(updated.id),
     } as unknown as User;
+  }
+
+  async delete(userId: string): Promise<void> {
+    await this.prisma.user.delete({
+      where: { id: userId },
+    });
   }
 }

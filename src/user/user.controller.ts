@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AccessAuth } from 'src/auth/auth.decorator';
@@ -32,6 +32,12 @@ export class UserController {
     return this.userService.create(createUserDto, currentUser);
   }
 
+  @Get('all')
+  @AccessAuth(UserAccessLevel.ADMIN)
+  getAllUsers(): Promise<User[]> {
+    return this.userService.getAllUsers();
+  }
+
   @Patch('profile')
   @AccessAuth(UserAccessLevel.ADMIN)
   updateProfile(
@@ -39,5 +45,11 @@ export class UserController {
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
     return this.userService.updateProfile(updateUserDto, currentUser.userId);
+  }
+
+  @Delete(':userId')
+  @AccessAuth(UserAccessLevel.ADMIN)
+  deleteUser(@Param('userId') userId: string): Promise<void> {
+    return this.userService.deleteUser(userId);
   }
 }
