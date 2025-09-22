@@ -22,22 +22,22 @@ model Institution {
   country   String?
   createdAt DateTime @default(now())
 
-  users user[]
+  users User[]
 }
 
-model user {
+model User {
   id       String  @id @default(uuid())
   email    String  @unique
   name     String
   password String
   age      Int?
-  gender   String? // 'male' | 'female' | 'non-binary' | 'prefer-not-to-say'
+  gender   String?
   phone    String?
   city     String?
   state    String?
   country  String?
 
-  institutionId String? // Foreign key to Institution
+  institutionId String?
   institution   Institution? @relation(fields: [institutionId], references: [id])
 
   userAccessLevel UserAccessLevel @default(USER)
@@ -54,12 +54,12 @@ model user {
 model Patient {
   id          String  @id @default(uuid())
   userId      String  @unique
-  laterality  String? // e.g. 'left', 'right'
-  race        String? // optional, anonymized
+  laterality  String?
+  race        String?
   socialGroup String?
   therapyId   String?
 
-  user     user      @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
   therapy  Therapy?  @relation(fields: [therapyId], references: [id])
   sessions Session[]
 }
@@ -79,7 +79,7 @@ model Session {
   therapistId     String?
   sessionComments String?
   patient         Patient       @relation(fields: [patientId], references: [id])
-  therapist       user?         @relation("ClinicianSessions", fields: [therapistId], references: [id])
+  therapist       User?         @relation("ClinicianSessions", fields: [therapistId], references: [id])
   games           SessionGame[]
 }
 
