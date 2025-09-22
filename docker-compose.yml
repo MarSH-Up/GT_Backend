@@ -1,15 +1,31 @@
-version: '3'
+version: '3.8'
 
 services:
   db:
     image: postgres:14.3
-    restart: unless-stopped
     container_name: gt_db
+    restart: unless-stopped
+    # Use 5433 on the host to avoid collisions with any local Postgres
     ports:
-      - '5432:5432'
+      - '5433:5432'
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+      # optional but safer on Windows if you ever mount the data dir
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      # named volume (cross-OS safe)
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE} -h localhost',
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  postgres_data:
