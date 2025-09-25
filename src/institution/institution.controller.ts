@@ -3,6 +3,8 @@ import { InstitutionService } from './institution.service';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { AccessAuth } from 'src/auth/auth.decorator';
 import { UserAccessLevel } from 'src/auth/entities/auth.entity';
+import { CurrentUser } from 'src/user/currentUser.decorator';
+import { ICurrentUser } from 'src/user/entities/current.user.dto';
 
 @Controller('institution')
 export class InstitutionController {
@@ -22,7 +24,7 @@ export class InstitutionController {
 
   @Get()
   @AccessAuth(UserAccessLevel.ADMIN)
-  findAll() {
-    return this.institutionService.findAll();
+  findAll(@CurrentUser() user:ICurrentUser) {
+    return this.institutionService.findAll(user.email);
   }
 }

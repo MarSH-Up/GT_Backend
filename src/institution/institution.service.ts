@@ -15,7 +15,8 @@ export class InstitutionService {
     return this.institutionRepository.findById(id);
   }
 
-  async findAll() {
+  async findAll(email:string) {
+    console.log(email)
     return this.institutionRepository.findAll();
   }
 }
