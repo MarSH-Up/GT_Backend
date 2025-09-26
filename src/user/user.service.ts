@@ -21,7 +21,7 @@ export class UserService {
   ) {}
   private readonly logger = new Logger(UserService.name);
 
-  async create(userData: CreateUserDto, creator: string): Promise<User> {
+  async create(userData: CreateUserDto, creator: ICurrentUser): Promise<User> {
     const userValidated = await this.userRepository.findByEmail(userData.email);
     if (userValidated) {
       throw new BadRequestException('User already exists');
@@ -43,7 +43,7 @@ export class UserService {
     return this.userRepository.create({
       ...userData,
       password: hashedPassword,
-      createdBy: 'creator.email',
+      createdBy: creator.email,
       userAccessLevel: userData.userAccessLevel,
       therapistId: userData.therapistId,
     });

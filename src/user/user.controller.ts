@@ -32,24 +32,12 @@ export class UserController {
   }
 
   @Post()
-  //@AccessAuth(UserAccessLevel.ADMIN)
+  @AccessAuth(UserAccessLevel.ADMIN)
   create(
     @Body() createUserDto: CreateUserDto,
-    //@CurrentUser() currentUser: ICurrentUser,
+    @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
-    return this.userService.create(
-      {
-        email: createUserDto.email,
-        password: createUserDto.password,
-        name: createUserDto.name,
-        therapistId: 'therapistId',
-        age: createUserDto.age,
-        institutionId: createUserDto.institutionId,
-        createdBy: createUserDto.createdBy,
-        userAccessLevel: UserAccessLevel.ADMIN,
-      },
-      'currentUser',
-    );
+    return this.userService.create(createUserDto, currentUser.email);
   }
 
   @Get('all')
