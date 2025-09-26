@@ -37,7 +37,7 @@ export class UserController {
     @Body() createUserDto: CreateUserDto,
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<User> {
-    return this.userService.create(createUserDto, currentUser.email);
+    return this.userService.create(createUserDto, currentUser);
   }
 
   @Get('all')
